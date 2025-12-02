@@ -1,0 +1,12 @@
+Test Document
+================
+
+This is a test document for the document management system.
+
+Key Features:
+- Document upload
+- Text extraction
+- AI summarization
+- Search functionality
+
+This document contains enough text to test the word count and text extraction features.

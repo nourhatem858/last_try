@@ -1,0 +1,275 @@
+{
+  "info": {
+    "name": "Knowledge Cards API",
+    "description": "Complete API collection for Knowledge Cards management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Knowledge Cards",
+      "item": [
+        {
+          "name": "Get All Cards",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/cards?page=1&limit=10&sort=newest",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cards"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "limit", "value": "10"},
+                {"key": "sort", "value": "newest"},
+                {"key": "category", "value": "", "disabled": true},
+                {"key": "tag", "value": "", "disabled": true},
+                {"key": "search", "value": "", "disabled": true}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Card by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/cards/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cards", ":id"],
+              "variable": [{"key": "id", "value": "CARD_ID_HERE"}]
+            }
+          }
+        },
+        {
+          "name": "Create Card",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"React Hooks Best Practices\",\n  \"content\": \"Learn the best practices for using React Hooks including useState, useEffect, and custom hooks.\",\n  \"category\": \"Web Development\",\n  \"tags\": [\"react\", \"javascript\", \"hooks\"],\n  \"visibility\": \"public\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cards",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cards"]
+            }
+          }
+        },
+        {
+          "name": "Update Card",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title\",\n  \"content\": \"Updated content\",\n  \"tags\": [\"updated-tag\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cards/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cards", ":id"],
+              "variable": [{"key": "id", "value": "CARD_ID_HERE"}]
+            }
+          }
+        },
+        {
+          "name": "Delete Card",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/cards/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cards", ":id"],
+              "variable": [{"key": "id", "value": "CARD_ID_HERE"}]
+            }
+          }
+        },
+        {
+          "name": "Get My Cards",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/cards/user/my-cards?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cards", "user", "my-cards"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "limit", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Related Cards",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/cards/:id/related?limit=5",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cards", ":id", "related"],
+              "query": [{"key": "limit", "value": "5"}],
+              "variable": [{"key": "id", "value": "CARD_ID_HERE"}]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Interactions",
+      "item": [
+        {
+          "name": "Like Card",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/interactions/:id/like",
+              "host": ["{{base_url}}"],
+              "path": ["api", "interactions", ":id", "like"],
+              "variable": [{"key": "id", "value": "CARD_ID_HERE"}]
+            }
+          }
+        },
+        {
+          "name": "Unlike Card",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/interactions/:id/like",
+              "host": ["{{base_url}}"],
+              "path": ["api", "interactions", ":id", "like"],
+              "variable": [{"key": "id", "value": "CARD_ID_HERE"}]
+            }
+          }
+        },
+        {
+          "name": "Bookmark Card",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/interactions/:id/bookmark",
+              "host": ["{{base_url}}"],
+              "path": ["api", "interactions", ":id", "bookmark"],
+              "variable": [{"key": "id", "value": "CARD_ID_HERE"}]
+            }
+          }
+        },
+        {
+          "name": "Remove Bookmark",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/interactions/:id/bookmark",
+              "host": ["{{base_url}}"],
+              "path": ["api", "interactions", ":id", "bookmark"],
+              "variable": [{"key": "id", "value": "CARD_ID_HERE"}]
+            }
+          }
+        },
+        {
+          "name": "Get Bookmarked Cards",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/interactions/bookmarks?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "interactions", "bookmarks"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "limit", "value": "10"}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Recommendations",
+      "item": [
+        {
+          "name": "Get Personalized Recommendations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/recommendations/personalized?limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "recommendations", "personalized"],
+              "query": [{"key": "limit", "value": "10"}]
+            }
+          }
+        },
+        {
+          "name": "Get Trending Cards",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/recommendations/trending?days=7&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "recommendations", "trending"],
+              "query": [
+                {"key": "days", "value": "7"},
+                {"key": "limit", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get AI Suggestions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Understanding Neural Networks\",\n  \"content\": \"Neural networks are computational models inspired by biological neural networks...\",\n  \"tags\": [\"ai\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/recommendations/suggest",
+              "host": ["{{base_url}}"],
+              "path": ["api", "recommendations", "suggest"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {"key": "base_url", "value": "http://localhost:5000"},
+    {"key": "token", "value": "YOUR_JWT_TOKEN_HERE"}
+  ]
+}

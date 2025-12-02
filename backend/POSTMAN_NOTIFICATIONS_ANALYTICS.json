@@ -1,0 +1,175 @@
+{
+  "info": {
+    "name": "Notifications & Analytics API",
+    "description": "Complete API collection for notifications and analytics",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get User Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications?page=1&limit=20&read=false",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "limit", "value": "20"},
+                {"key": "read", "value": "false", "description": "Filter by read status"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/:id/read",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", ":id", "read"],
+              "variable": [{"key": "id", "value": "NOTIFICATION_ID_HERE"}]
+            }
+          }
+        },
+        {
+          "name": "Mark All as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/read-all",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", "read-all"]
+            }
+          }
+        },
+        {
+          "name": "Delete Notification",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", ":id"],
+              "variable": [{"key": "id", "value": "NOTIFICATION_ID_HERE"}]
+            }
+          }
+        },
+        {
+          "name": "Delete All Read Notifications",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/read",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", "read"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Create Analytics Log",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action_type\": \"view\",\n  \"card_id\": \"507f1f77bcf86cd799439011\",\n  \"metadata\": {\n    \"duration_seconds\": 120,\n    \"device_type\": \"desktop\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/analytics/logs",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "logs"]
+            }
+          }
+        },
+        {
+          "name": "Get User Analytics Logs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/logs?page=1&limit=50&action_type=view",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "logs"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "limit", "value": "50"},
+                {"key": "action_type", "value": "view", "disabled": true},
+                {"key": "start_date", "value": "2024-01-01", "disabled": true},
+                {"key": "end_date", "value": "2024-12-31", "disabled": true}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Analytics Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/summary?days=30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "summary"],
+              "query": [
+                {"key": "days", "value": "30"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Global Analytics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{admin_token}}"}
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/global?days=7",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "global"],
+              "query": [
+                {"key": "days", "value": "7"}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {"key": "base_url", "value": "http://localhost:5000"},
+    {"key": "token", "value": "YOUR_JWT_TOKEN_HERE"},
+    {"key": "admin_token", "value": "ADMIN_JWT_TOKEN_HERE"}
+  ]
+}

@@ -1,0 +1,791 @@
+{
+  "test_execution": {
+    "timestamp": "2024-12-08T15:30:00Z",
+    "duration_seconds": 180,
+    "total_tests": 13,
+    "passed": 5,
+    "failed": 8,
+    "confidence_score": 45
+  },
+  "test_results": {
+    "1_dashboard": {
+      "status": "PARTIALLY_PASSED",
+      "score": 6,
+      "tests": {
+        "quick_actions_ui": {
+          "status": "PASSED",
+          "details": "All 6 quick action buttons render correctly with beautiful UI"
+        },
+        "quick_actions_functionality": {
+          "status": "FAILED",
+          "issue": "Actions only console.log, don't actually create items or navigate",
+          "fix_required": "Implement actual navigation and modal triggers"
+        },
+        "recent_activity_display": {
+          "status": "PASSED",
+          "details": "Component renders correctly with proper formatting"
+        },
+        "recent_activity_updates": {
+          "status": "FAILED",
+          "issue": "Activity doesn't update when actions are performed",
+          "fix_required": "Implement real-time activity tracking"
+        },
+        "dashboard_stats": {
+          "status": "PARTIALLY_PASSED",
+          "issue": "Stats load from API but use mock data",
+          "fix_required": "Connect to real database"
+        }
+      },
+      "critical_issues": [
+        "Quick Actions don't navigate or open modals",
+        "No real-time activity updates",
+        "Mock data instead of database queries"
+      ],
+      "fixes_applied": [],
+      "recommended_fixes": [
+        "Update QuickActionsPanel to use router.push() and modal states",
+        "Implement WebSocket or polling for real-time activity",
+        "Replace mock data with MongoDB queries"
+      ]
+    },
+    "2_authentication": {
+      "status": "PASSED",
+      "score": 8,
+      "tests": {
+        "login": {
+          "status": "PASSED",
+          "details": "Login page exists, JWT authentication works"
+        },
+        "signup": {
+          "status": "PASSED",
+          "details": "Signup page exists, account creation works"
+        },
+        "logout": {
+          "status": "PASSED",
+          "details": "Logout functionality works correctly"
+        },
+        "role_based_access": {
+          "status": "PARTIALLY_PASSED",
+          "issue": "Role structure exists but not enforced",
+          "fix_required": "Add middleware for role-based route protection"
+        }
+      },
+      "critical_issues": [],
+      "fixes_applied": [],
+      "recommended_fixes": [
+        "Add role-based middleware",
+        "Implement admin-only routes",
+        "Add permission checks in API routes"
+      ]
+    },
+    "3_workspaces": {
+      "status": "PASSED",
+      "score": 7,
+      "tests": {
+        "create_workspace": {
+          "status": "PASSED",
+          "details": "Create workspace modal and API work"
+        },
+        "open_workspace": {
+          "status": "PASSED",
+          "details": "Workspace view page exists at /workspaces/[id], no 404"
+        },
+        "workspace_content": {
+          "status": "PASSED",
+          "details": "Shows notes, documents, members, activity tabs"
+        },
+        "ai_suggestions": {
+          "status": "FAILED",
+          "issue": "No AI suggestions for task management",
+          "fix_required": "Implement AI-powered task recommendations"
+        },
+        "internal_links": {
+          "status": "PASSED",
+          "details": "Navigation between workspace items works"
+        }
+      },
+      "critical_issues": [
+        "No AI task suggestions",
+        "Mock data only"
+      ],
+      "fixes_applied": [
+        "Created /workspaces/[id]/page.tsx",
+        "Fixed params handling",
+        "Added all tabs (Overview, Notes, Documents, Members, Activity)"
+      ],
+      "recommended_fixes": [
+        "Implement AI task suggestion API",
+        "Add smart task assignment",
+        "Connect to real database"
+      ]
+    },
+    "4_notes": {
+      "status": "PASSED",
+      "score": 7,
+      "tests": {
+        "create_note": {
+          "status": "PASSED",
+          "details": "Create note modal and API work"
+        },
+        "open_note": {
+          "status": "PASSED",
+          "details": "Note view page exists at /notes/[id], no 404"
+        },
+        "edit_note": {
+          "status": "FAILED",
+          "issue": "Edit button navigates to /notes/[id]/edit which doesn't exist",
+          "fix_required": "Create note edit page"
+        },
+        "delete_note": {
+          "status": "PASSED",
+          "details": "Delete functionality works"
+        },
+        "ai_summarize": {
+          "status": "FAILED",
+          "issue": "No AI summarization for notes",
+          "fix_required": "Implement AI note summarization"
+        },
+        "ai_generate_ideas": {
+          "status": "FAILED",
+          "issue": "No AI idea generation",
+          "fix_required": "Add AI brainstorming feature"
+        },
+        "ai_assist_writing": {
+          "status": "FAILED",
+          "issue": "No AI writing assistance",
+          "fix_required": "Implement AI writing helper"
+        }
+      },
+      "critical_issues": [
+        "Edit page missing",
+        "No AI features for notes"
+      ],
+      "fixes_applied": [
+        "Created /notes/[id]/page.tsx",
+        "Fixed params handling",
+        "Added pin/unpin functionality"
+      ],
+      "recommended_fixes": [
+        "Create /notes/[id]/edit page",
+        "Add AI summarization API",
+        "Implement AI writing assistant",
+        "Add AI idea generation"
+      ]
+    },
+    "5_documents": {
+      "status": "PASSED",
+      "score": 6,
+      "tests": {
+        "upload_document": {
+          "status": "PASSED",
+          "details": "Upload modal and API work"
+        },
+        "open_document": {
+          "status": "PASSED",
+          "details": "Document view page exists at /documents/[id], no 404"
+        },
+        "view_document": {
+          "status": "PASSED",
+          "details": "PDF iframe, image display work"
+        },
+        "ai_summarize": {
+          "status": "FAILED",
+          "issue": "Returns hardcoded summary, doesn't analyze actual document",
+          "fix_required": "Implement real PDF/Word text extraction and AI analysis"
+        },
+        "ai_extract_info": {
+          "status": "FAILED",
+          "issue": "No information extraction",
+          "fix_required": "Add AI entity extraction"
+        },
+        "ai_generate_reports": {
+          "status": "FAILED",
+          "issue": "No report generation",
+          "fix_required": "Implement AI report generation"
+        }
+      },
+      "critical_issues": [
+        "Fake AI summarization",
+        "No text extraction from files",
+        "No real document analysis"
+      ],
+      "fixes_applied": [
+        "Created /documents/[id]/page.tsx",
+        "Fixed params handling",
+        "Added file preview system",
+        "Added AI summary section (UI only)"
+      ],
+      "recommended_fixes": [
+        "Integrate pdf-parse for PDF text extraction",
+        "Add mammoth for Word document parsing",
+        "Implement real AI summarization with OpenAI/Claude",
+        "Add entity extraction",
+        "Implement report generation"
+      ]
+    },
+    "6_search": {
+      "status": "FAILED",
+      "score": 3,
+      "tests": {
+        "search_ui": {
+          "status": "PASSED",
+          "details": "Search bar exists with debouncing and keyboard navigation"
+        },
+        "search_functionality": {
+          "status": "FAILED",
+          "issue": "Returns fake results that just echo the query",
+          "fix_required": "Implement real database search"
+        },
+        "fuzzy_matching": {
+          "status": "FAILED",
+          "issue": "No fuzzy matching or typo tolerance",
+          "fix_required": "Add Fuse.js or Elasticsearch"
+        },
+        "synonyms": {
+          "status": "FAILED",
+          "issue": "No synonym support",
+          "fix_required": "Implement semantic search"
+        },
+        "multi_category": {
+          "status": "PASSED",
+          "details": "Searches across notes, documents, workspaces, chats"
+        },
+        "relevance_ranking": {
+          "status": "FAILED",
+          "issue": "No relevance scoring",
+          "fix_required": "Implement TF-IDF or BM25 ranking"
+        },
+        "speed": {
+          "status": "PASSED",
+          "details": "300ms debounce, fast UI response"
+        },
+        "english_support": {
+          "status": "PASSED",
+          "details": "Works for English queries"
+        },
+        "arabic_support": {
+          "status": "FAILED",
+          "issue": "No Arabic language support",
+          "fix_required": "Add Arabic language detection and search"
+        }
+      },
+      "critical_issues": [
+        "Fake search results",
+        "No actual database queries",
+        "No fuzzy matching",
+        "No Arabic support"
+      ],
+      "fixes_applied": [],
+      "recommended_fixes": [
+        "Replace mock data with MongoDB text search",
+        "Integrate Elasticsearch or Meilisearch",
+        "Add Fuse.js for fuzzy matching",
+        "Implement Arabic language support",
+        "Add relevance scoring algorithm"
+      ]
+    },
+    "7_chat_ai_assistance": {
+      "status": "FAILED",
+      "score": 2,
+      "tests": {
+        "ai_chat_ui": {
+          "status": "PASSED",
+          "details": "Chat interface exists and looks good"
+        },
+        "ai_responses": {
+          "status": "FAILED",
+          "issue": "Returns hardcoded template responses",
+          "fix_required": "Integrate real AI (OpenAI/Claude)"
+        },
+        "project_questions": {
+          "status": "FAILED",
+          "issue": "Cannot answer questions about actual workspace content",
+          "fix_required": "Implement RAG (Retrieval Augmented Generation)"
+        },
+        "multi_step_tasks": {
+          "status": "FAILED",
+          "issue": "Cannot execute multi-step workflows",
+          "fix_required": "Add task orchestration"
+        },
+        "content_generation": {
+          "status": "FAILED",
+          "issue": "Returns mock content",
+          "fix_required": "Connect to real AI API"
+        },
+        "summarization": {
+          "status": "FAILED",
+          "issue": "Fake summaries",
+          "fix_required": "Implement real summarization"
+        },
+        "context_memory": {
+          "status": "FAILED",
+          "issue": "Doesn't maintain conversation context",
+          "fix_required": "Implement conversation history tracking"
+        },
+        "file_retrieval": {
+          "status": "FAILED",
+          "issue": "Cannot retrieve info from actual files",
+          "fix_required": "Implement document indexing and retrieval"
+        }
+      },
+      "critical_issues": [
+        "No real AI integration",
+        "Cannot answer questions",
+        "Cannot execute tasks",
+        "No context memory",
+        "Fake responses only"
+      ],
+      "fixes_applied": [],
+      "recommended_fixes": [
+        "Integrate OpenAI GPT-4 or Claude API",
+        "Implement RAG with LangChain",
+        "Add vector database (Pinecone/Weaviate)",
+        "Create embeddings for all content",
+        "Implement conversation history",
+        "Add task execution engine"
+      ]
+    },
+    "8_members": {
+      "status": "PASSED",
+      "score": 6,
+      "tests": {
+        "view_members": {
+          "status": "PASSED",
+          "details": "Members page exists and displays correctly"
+        },
+        "workspace_members": {
+          "status": "PASSED",
+          "details": "Members shown in workspace view"
+        },
+        "ai_task_assignment": {
+          "status": "FAILED",
+          "issue": "No AI suggestions for task assignment",
+          "fix_required": "Implement AI-powered task assignment"
+        },
+        "ai_role_suggestions": {
+          "status": "FAILED",
+          "issue": "No AI role recommendations",
+          "fix_required": "Add AI role suggestion feature"
+        }
+      },
+      "critical_issues": [
+        "No AI features for members",
+        "Mock data only"
+      ],
+      "fixes_applied": [],
+      "recommended_fixes": [
+        "Implement AI task assignment based on member skills",
+        "Add AI role recommendations",
+        "Connect to real database"
+      ]
+    },
+    "9_quick_actions_suggestions": {
+      "status": "FAILED",
+      "score": 3,
+      "tests": {
+        "quick_actions_ui": {
+          "status": "PASSED",
+          "details": "Quick actions render beautifully"
+        },
+        "quick_actions_work": {
+          "status": "FAILED",
+          "issue": "Actions don't actually do anything",
+          "fix_required": "Implement actual functionality"
+        },
+        "ai_suggestions_notes": {
+          "status": "FAILED",
+          "issue": "No AI suggestions for notes",
+          "fix_required": "Add AI note suggestions"
+        },
+        "ai_suggestions_documents": {
+          "status": "FAILED",
+          "issue": "No AI suggestions for documents",
+          "fix_required": "Add AI document suggestions"
+        },
+        "ai_suggestions_workspaces": {
+          "status": "FAILED",
+          "issue": "No AI suggestions for workspaces",
+          "fix_required": "Add AI workspace suggestions"
+        },
+        "ai_suggestions_dashboard": {
+          "status": "PARTIALLY_PASSED",
+          "issue": "Hardcoded insights, not AI-generated",
+          "fix_required": "Generate real AI insights"
+        },
+        "suggestions_accuracy": {
+          "status": "FAILED",
+          "issue": "N/A - no suggestions exist",
+          "fix_required": "Implement AI suggestion engine"
+        },
+        "suggestions_relevance": {
+          "status": "FAILED",
+          "issue": "N/A - no suggestions exist",
+          "fix_required": "Implement relevance scoring"
+        },
+        "suggestions_actionable": {
+          "status": "FAILED",
+          "issue": "N/A - no suggestions exist",
+          "fix_required": "Make suggestions clickable and actionable"
+        }
+      },
+      "critical_issues": [
+        "Quick actions don't work",
+        "No AI suggestions anywhere",
+        "Hardcoded insights only"
+      ],
+      "fixes_applied": [],
+      "recommended_fixes": [
+        "Implement Quick Actions functionality",
+        "Create AI suggestion engine",
+        "Add context-aware recommendations",
+        "Implement smart task suggestions",
+        "Add related content discovery"
+      ]
+    },
+    "10_error_handling": {
+      "status": "PASSED",
+      "score": 8,
+      "tests": {
+        "missing_content": {
+          "status": "PASSED",
+          "details": "Shows friendly 'Not Found' pages"
+        },
+        "invalid_ids": {
+          "status": "PASSED",
+          "details": "Handles invalid IDs gracefully"
+        },
+        "empty_searches": {
+          "status": "PASSED",
+          "details": "Shows 'No results found' message"
+        },
+        "ai_graceful_failure": {
+          "status": "PASSED",
+          "details": "AI errors don't crash the app"
+        },
+        "no_hallucinations": {
+          "status": "PASSED",
+          "details": "Mock responses are consistent"
+        }
+      },
+      "critical_issues": [],
+      "fixes_applied": [],
+      "recommended_fixes": [
+        "Add error logging service",
+        "Implement retry mechanisms",
+        "Add more specific error messages"
+      ]
+    },
+    "11_flow_integrity": {
+      "status": "PASSED",
+      "score": 7,
+      "tests": {
+        "dashboard_to_workspaces": {
+          "status": "PASSED",
+          "details": "Navigation works"
+        },
+        "workspaces_to_notes": {
+          "status": "PASSED",
+          "details": "Navigation works"
+        },
+        "workspaces_to_documents": {
+          "status": "PASSED",
+          "details": "Navigation works"
+        },
+        "notes_to_chat": {
+          "status": "PASSED",
+          "details": "Navigation works"
+        },
+        "documents_to_ai": {
+          "status": "PASSED",
+          "details": "Navigation works"
+        },
+        "state_preservation": {
+          "status": "PARTIALLY_PASSED",
+          "issue": "State resets on navigation",
+          "fix_required": "Implement state management (Zustand/Redux)"
+        },
+        "action_sequence": {
+          "status": "PASSED",
+          "details": "Actions can be performed in sequence"
+        }
+      },
+      "critical_issues": [
+        "State doesn't persist across navigation"
+      ],
+      "fixes_applied": [],
+      "recommended_fixes": [
+        "Implement global state management",
+        "Add URL state synchronization",
+        "Implement session storage for temporary state"
+      ]
+    },
+    "12_output_quality": {
+      "status": "PASSED",
+      "score": 8,
+      "tests": {
+        "ai_clarity": {
+          "status": "FAILED",
+          "issue": "AI responses are generic templates",
+          "fix_required": "Implement real AI"
+        },
+        "ai_structure": {
+          "status": "FAILED",
+          "issue": "No structured output",
+          "fix_required": "Add markdown support and formatting"
+        },
+        "ai_formatting": {
+          "status": "FAILED",
+          "issue": "Plain text only",
+          "fix_required": "Add rich text formatting"
+        },
+        "ui_design": {
+          "status": "PASSED",
+          "details": "Modern, polished, beautiful UI"
+        },
+        "color_scheme": {
+          "status": "PASSED",
+          "details": "Dark Blue + Black with Cyan accents - perfect"
+        },
+        "animations": {
+          "status": "PASSED",
+          "details": "Smooth, professional animations"
+        },
+        "layouts": {
+          "status": "PASSED",
+          "details": "Clean, well-organized layouts"
+        }
+      },
+      "critical_issues": [
+        "AI output quality is poor (mock data)"
+      ],
+      "fixes_applied": [],
+      "recommended_fixes": [
+        "Integrate real AI",
+        "Add markdown rendering",
+        "Implement code syntax highlighting",
+        "Add table support"
+      ]
+    },
+    "13_performance": {
+      "status": "PASSED",
+      "score": 7,
+      "tests": {
+        "page_load_speed": {
+          "status": "PASSED",
+          "details": "Fast initial load"
+        },
+        "search_speed": {
+          "status": "PASSED",
+          "details": "300ms debounce, responsive UI"
+        },
+        "navigation_speed": {
+          "status": "PASSED",
+          "details": "Instant navigation with Next.js"
+        },
+        "api_response_time": {
+          "status": "PASSED",
+          "details": "Mock APIs respond instantly"
+        },
+        "real_db_performance": {
+          "status": "NOT_TESTED",
+          "issue": "No real database to test",
+          "fix_required": "Implement database and test performance"
+        }
+      },
+      "critical_issues": [],
+      "fixes_applied": [],
+      "recommended_fixes": [
+        "Add database indexing",
+        "Implement caching (Redis)",
+        "Add pagination for large datasets",
+        "Optimize images"
+      ]
+    }
+  },
+  "summary": {
+    "strengths": [
+      "Beautiful, modern UI with excellent design",
+      "Smooth animations and transitions",
+      "Responsive design works on all devices",
+      "Good error handling and loading states",
+      "Clean code architecture",
+      "TypeScript types properly defined",
+      "All major pages exist (no 404s)",
+      "Navigation flow works correctly",
+      "Fast performance (with mock data)"
+    ],
+    "critical_weaknesses": [
+      "NO REAL AI - all responses are hardcoded",
+      "NO REAL SEARCH - returns fake results",
+      "NO DATABASE - all data is mock",
+      "NO DOCUMENT ANALYSIS - cannot read files",
+      "NO ARABIC SUPPORT - English only",
+      "Quick Actions don't work",
+      "No AI suggestions anywhere",
+      "Cannot execute multi-step tasks",
+      "No context memory in conversations"
+    ],
+    "passed_categories": [
+      "Authentication (8/10)",
+      "Error Handling (8/10)",
+      "Output Quality - UI (8/10)",
+      "Workspaces (7/10)",
+      "Notes (7/10)",
+      "Flow Integrity (7/10)",
+      "Performance (7/10)"
+    ],
+    "failed_categories": [
+      "Chat & AI Assistance (2/10)",
+      "Search Functionality (3/10)",
+      "Quick Actions & Suggestions (3/10)",
+      "Documents AI Features (6/10)",
+      "Members AI Features (6/10)"
+    ]
+  },
+  "priority_fixes": {
+    "critical_priority_1": [
+      {
+        "issue": "No real AI integration",
+        "impact": "System cannot function as AI assistant",
+        "fix": "Integrate OpenAI GPT-4 or Claude API",
+        "estimated_time": "2-3 weeks",
+        "code_example": "import OpenAI from 'openai'; const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });"
+      },
+      {
+        "issue": "Fake search results",
+        "impact": "Users cannot find their content",
+        "fix": "Implement Elasticsearch or MongoDB text search",
+        "estimated_time": "1-2 weeks",
+        "code_example": "await db.collection('notes').find({ $text: { $search: query } })"
+      },
+      {
+        "issue": "No database integration",
+        "impact": "No data persistence, all mock data",
+        "fix": "Connect to MongoDB and replace all mock data",
+        "estimated_time": "1-2 weeks",
+        "code_example": "const db = await connectDB(); const notes = await db.collection('notes').find({ userId }).toArray();"
+      },
+      {
+        "issue": "No document text extraction",
+        "impact": "Cannot analyze document content",
+        "fix": "Integrate pdf-parse and mammoth libraries",
+        "estimated_time": "1 week",
+        "code_example": "import pdf from 'pdf-parse'; const data = await pdf(buffer); const text = data.text;"
+      }
+    ],
+    "high_priority_2": [
+      {
+        "issue": "No Arabic support",
+        "impact": "Cannot serve Arabic-speaking users",
+        "fix": "Add language detection and Arabic search",
+        "estimated_time": "1 week",
+        "code_example": "import { franc } from 'franc'; const lang = franc(text);"
+      },
+      {
+        "issue": "Quick Actions don't work",
+        "impact": "Users cannot perform quick tasks",
+        "fix": "Implement navigation and modal triggers",
+        "estimated_time": "2-3 days",
+        "code_example": "onClick={() => router.push('/notes')}"
+      },
+      {
+        "issue": "No RAG implementation",
+        "impact": "AI cannot answer questions about content",
+        "fix": "Implement RAG with LangChain and vector DB",
+        "estimated_time": "1-2 weeks",
+        "code_example": "const relevantDocs = await vectorStore.similaritySearch(query, 5);"
+      },
+      {
+        "issue": "No AI suggestions",
+        "impact": "Missing key AI features",
+        "fix": "Create AI suggestion engine",
+        "estimated_time": "1 week",
+        "code_example": "const suggestions = await analyzeWorkspace(workspaceId);"
+      }
+    ],
+    "medium_priority_3": [
+      {
+        "issue": "No note edit page",
+        "impact": "Cannot edit notes",
+        "fix": "Create /notes/[id]/edit page",
+        "estimated_time": "1 day",
+        "code_example": "Create page with rich text editor"
+      },
+      {
+        "issue": "No state management",
+        "impact": "State resets on navigation",
+        "fix": "Implement Zustand or Redux",
+        "estimated_time": "2-3 days",
+        "code_example": "import create from 'zustand';"
+      },
+      {
+        "issue": "No fuzzy search",
+        "impact": "Cannot handle typos",
+        "fix": "Add Fuse.js",
+        "estimated_time": "1 day",
+        "code_example": "import Fuse from 'fuse.js';"
+      }
+    ]
+  },
+  "fixes_to_apply_now": [
+    {
+      "file": "components/dashboard/QuickActionsPanel.tsx",
+      "issue": "Quick Actions don't navigate",
+      "fix": "Add router.push() and modal states",
+      "status": "READY_TO_APPLY"
+    },
+    {
+      "file": "app/notes/[id]/edit/page.tsx",
+      "issue": "Edit page missing",
+      "fix": "Create note edit page",
+      "status": "READY_TO_APPLY"
+    },
+    {
+      "file": "components/dashboard/RecentActivityList.tsx",
+      "issue": "Activity doesn't update",
+      "fix": "Add real-time updates",
+      "status": "READY_TO_APPLY"
+    }
+  ],
+  "estimated_total_work": {
+    "critical_fixes": "5-7 weeks",
+    "high_priority": "2-3 weeks",
+    "medium_priority": "1 week",
+    "total": "8-11 weeks",
+    "team_size_recommended": "2-3 developers"
+  },
+  "deployment_readiness": {
+    "ui_ux": "PRODUCTION_READY",
+    "backend": "NOT_READY",
+    "ai_features": "NOT_READY",
+    "database": "NOT_READY",
+    "search": "NOT_READY",
+    "overall": "NOT_PRODUCTION_READY",
+    "recommendation": "DO NOT DEPLOY - Complete critical fixes first"
+  },
+  "confidence_breakdown": {
+    "ui_design": 95,
+    "code_architecture": 85,
+    "error_handling": 80,
+    "navigation": 85,
+    "ai_functionality": 5,
+    "search_quality": 20,
+    "data_persistence": 10,
+    "multi_language": 5,
+    "document_processing": 10,
+    "overall_confidence": 45
+  },
+  "next_steps": [
+    "1. Integrate OpenAI or Claude API for real AI",
+    "2. Connect to MongoDB and replace all mock data",
+    "3. Implement Elasticsearch or Meilisearch for search",
+    "4. Add pdf-parse for document text extraction",
+    "5. Implement RAG for context-aware AI responses",
+    "6. Add Arabic language support",
+    "7. Fix Quick Actions to actually work",
+    "8. Create AI suggestion engine",
+    "9. Add note edit page",
+    "10. Implement state management"
+  ],
+  "conclusion": "The project has an EXCELLENT foundation with beautiful UI and good architecture, but FAILS as a functional AI system because all AI features are mock/fake. The system is essentially a high-fidelity prototype. Invest 8-11 weeks to implement real AI, search, and database integration before deployment."
+}

@@ -1,0 +1,27 @@
+{
+  "name": "adaptive-ai-workspace-database",
+  "version": "1.0.0",
+  "description": "MongoDB database structure for Adaptive AI Knowledge Workspace",
+  "main": "connection.js",
+  "scripts": {
+    "setup": "node setup.js",
+    "seed": "node seed.js",
+    "setup:dev": "NODE_ENV=development node setup.js",
+    "seed:dev": "NODE_ENV=development node seed.js"
+  },
+  "keywords": [
+    "mongodb",
+    "database",
+    "ai",
+    "knowledge-management"
+  ],
+  "dependencies": {
+    "mongoose": "^8.0.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

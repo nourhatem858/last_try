@@ -1,0 +1,39 @@
+Sample Document for Testing
+============================
+
+Introduction
+------------
+This is a comprehensive test document for the document management system.
+It contains multiple paragraphs and sections to test text extraction and AI summarization.
+
+Key Features
+------------
+1. Document Upload: Users can upload PDF, DOCX, and TXT files
+2. Text Extraction: Automatic extraction of text from uploaded documents
+3. AI Summarization: Generate intelligent summaries using AI
+4. Search Functionality: Full-text search across all documents
+5. Workspace Organization: Organize documents by workspace
+
+Technical Details
+-----------------
+The system uses the following technologies:
+- Next.js 16 for the frontend and API routes
+- MongoDB for data storage
+- pdf-parse for PDF text extraction
+- mammoth for DOCX text extraction
+- OpenAI for AI-powered features
+
+Use Cases
+---------
+This document management system is perfect for:
+* Teams collaborating on projects
+* Researchers organizing papers
+* Students managing study materials
+* Businesses handling contracts and reports
+
+Conclusion
+----------
+This test document demonstrates the text extraction capabilities of the system.
+It should be successfully uploaded, processed, and made searchable.
+
+Total word count: approximately 150 words
