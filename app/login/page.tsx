@@ -1,18 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [formKey, setFormKey] = useState(0);
+
+  const resetAuthForm = () => {
+    setEmail('');
+    setPassword('');
+    setError('');
+    setSuccess(false);
+    setFormKey(prev => prev + 1);
+  };
+
+  useEffect(() => {
+    resetAuthForm();
+  }, []);
 
   // Email validation
   const validateEmail = (email: string): boolean => {
@@ -113,16 +126,17 @@ export default function LoginPage() {
           )}
 
           {/* Login Form */}
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form key={formKey} onSubmit={handleLogin} className="space-y-5">
             <div>
               <label className="block text-sm font-semibold text-white mb-2">
                 Email Address
               </label>
               <input
                 type="email"
-                value={email}
+                value={email || ''}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                autoComplete="off"
                 className="w-full px-4 py-3 bg-[#0A1420] border border-[#1F77FF]/30 rounded-lg text-white placeholder-[#999999] focus:ring-2 focus:ring-[#1F77FF] focus:border-transparent transition-all duration-200"
                 placeholder="your@email.com"
               />
@@ -134,9 +148,10 @@ export default function LoginPage() {
               </label>
               <input
                 type="password"
-                value={password}
+                value={password || ''}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                autoComplete="off"
                 className="w-full px-4 py-3 bg-[#0A1420] border border-[#1F77FF]/30 rounded-lg text-white placeholder-[#999999] focus:ring-2 focus:ring-[#1F77FF] focus:border-transparent transition-all duration-200"
                 placeholder="Enter your password"
               />

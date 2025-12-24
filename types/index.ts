@@ -96,3 +96,32 @@ export interface CardFilters {
   page?: number;
   limit?: number;
 }
+
+// Generic API Response wrapper
+export interface ApiResponse<T = any> {
+  success: boolean;
+  error?: string;
+  message?: string;
+  data?: T;
+}
+
+// Specific API Response Types
+export interface CardsApiResponse extends ApiResponse {
+  cards?: Card[];
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+}
+
+export interface CardApiResponse extends ApiResponse {
+  card?: Card;
+}
+
+export interface DeleteResponse extends ApiResponse {
+  deletedId?: string;
+}

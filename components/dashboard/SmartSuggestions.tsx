@@ -8,7 +8,18 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { SparklesIcon, LightBulbIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { AIService, AISuggestion } from '@/lib/ai-service';
+
+interface AISuggestion {
+  id: string;
+  type: 'action' | 'insight' | 'tip';
+  title: string;
+  description: string;
+  confidence?: number;
+  action?: {
+    label: string;
+    href: string;
+  };
+}
 
 interface SmartSuggestionsProps {
   context?: {
@@ -25,15 +36,37 @@ export default function SmartSuggestions({ context, recentActivity }: SmartSugge
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Generate suggestions based on context
+    // Generate suggestions based on context (without AI)
     const generateSuggestions = () => {
       setLoading(true);
       try {
-        const aiSuggestions = AIService.generateSuggestions({
-          ...context,
-          recentActivity,
-        });
-        setSuggestions(aiSuggestions.slice(0, 4)); // Show top 4
+        const mockSuggestions: AISuggestion[] = [
+          {
+            id: '1',
+            type: 'action',
+            title: 'Create a new note',
+            description: 'Start documenting your ideas',
+            confidence: 0.95,
+            action: { label: 'Create Note', href: '/notes' },
+          },
+          {
+            id: '2',
+            type: 'insight',
+            title: 'Upload a document',
+            description: 'Add documents to your workspace',
+            confidence: 0.88,
+            action: { label: 'Upload', href: '/documents' },
+          },
+          {
+            id: '3',
+            type: 'tip',
+            title: 'Organize your workspace',
+            description: 'Create folders and tags for better organization',
+            confidence: 0.92,
+            action: { label: 'Go to Workspaces', href: '/workspaces' },
+          },
+        ];
+        setSuggestions(mockSuggestions);
       } catch (error) {
         console.error('Error generating suggestions:', error);
       } finally {
@@ -153,11 +186,11 @@ export default function SmartSuggestions({ context, recentActivity }: SmartSugge
                     {suggestion.title}
                   </h4>
                   <div className="flex items-center gap-1 text-xs text-cyan-400 flex-shrink-0">
-                    <span>{Math.round(suggestion.confidence * 100)}%</span>
+                    <span>{Math.round((suggestion.confidence || 0.5) * 100)}%</span>
                     <div className="w-12 h-1.5 bg-black/50 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full transition-all duration-500"
-                        style={{ width: `${suggestion.confidence * 100}%` }}
+                        style={{ width: `${(suggestion.confidence || 0.5) * 100}%` }}
                       />
                     </div>
                   </div>

@@ -7,6 +7,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAI } from '@/contexts/AIProvider';
 import {
   SparklesIcon,
   PaperAirplaneIcon,
@@ -29,18 +30,18 @@ interface AIResponsePanelProps {
 
 export default function AIResponsePanel({ isOpen, onClose }: AIResponsePanelProps) {
   const { user, isAuthenticated } = useAuth();
+  const { askAI, loading, createConversation, currentConversation } = useAI();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       role: 'assistant',
       content: isAuthenticated
-        ? `Hello ${user?.name}! I'm your AI assistant. I can help you search through your documents, answer questions, and provide insights. What would you like to know?`
+        ? `مرحباً ${user?.name}! 👋 أنا مساعدك الذكي. يمكنني مساعدتك في:\n\n• البحث في مستنداتك وملاحظاتك\n• تلخيص المحتوى\n• الإجابة على أسئلتك\n• تنظيم معلوماتك\n\nكيف يمكنني مساعدتك اليوم؟`
         : 'Hello! I can provide limited assistance. Please log in for full access to your workspace and documents.',
       timestamp: new Date(),
     },
   ]);
   const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -52,7 +53,7 @@ export default function AIResponsePanel({ isOpen, onClose }: AIResponsePanelProp
   }, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || loading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -62,23 +63,50 @@ export default function AIResponsePanel({ isOpen, onClose }: AIResponsePanelProp
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const question = input;
     setInput('');
-    setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      const aiMessage: Message = {
+    if (!isAuthenticated) {
+      const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: isAuthenticated
-          ? `I understand you're asking about "${input}". Based on your workspace, I found relevant information in your documents. Here's what I can tell you:\n\n• This topic is covered in 3 of your documents\n• Last updated 2 days ago\n• Related to your "Project Planning" workspace\n\nWould you like me to open the related documents?`
-          : 'Please log in to access full AI capabilities and search through your documents.',
+        content: 'من فضلك سجل دخولك للوصول إلى جميع إمكانيات الذكاء الاصطناعي والبحث في مستنداتك.\n\nPlease log in to access full AI capabilities and search through your documents.',
         timestamp: new Date(),
-        relatedFiles: isAuthenticated ? ['Document 1.pdf', 'Notes.md', 'Report.docx'] : undefined,
       };
+      setMessages((prev) => [...prev, errorMessage]);
+      return;
+    }
+
+    try {
+      // Create conversation if needed
+      let convId = currentConversation?.id;
+      if (!convId) {
+        const newConv = createConversation(question.slice(0, 50) + '...');
+        convId = newConv.id;
+      }
+
+      // Get real AI response
+      const aiResponse = await askAI(question, convId);
+      
+      const aiMessage: Message = {
+        id: aiResponse.id,
+        role: 'assistant',
+        content: aiResponse.content,
+        timestamp: new Date(aiResponse.timestamp),
+        relatedFiles: aiResponse.sources?.map(s => s.title),
+      };
+      
       setMessages((prev) => [...prev, aiMessage]);
-      setIsTyping(false);
-    }, 1500);
+    } catch (error: any) {
+      console.error('AI Error:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: 'عذراً، حدث خطأ. من فضلك حاول مرة أخرى.\n\nSorry, an error occurred. Please try again.',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -164,7 +192,7 @@ export default function AIResponsePanel({ isOpen, onClose }: AIResponsePanelProp
         ))}
 
         {/* Typing Indicator */}
-        {isTyping && (
+        {loading && (
           <div className="flex justify-start">
             <div className="bg-black/40 border border-cyan-500/20 rounded-2xl p-4">
               <div className="flex gap-2">

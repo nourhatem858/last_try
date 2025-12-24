@@ -33,6 +33,14 @@ interface ChatCardProps {
 }
 
 export default function ChatCard({ chat }: ChatCardProps) {
+  // Safety checks
+  if (!chat || !chat.id) {
+    console.warn('⚠️ [ChatCard] Invalid chat data:', chat);
+    return null;
+  }
+
+  const participantsCount = Array.isArray(chat.participants) ? chat.participants.length : 0;
+
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -48,7 +56,8 @@ export default function ChatCard({ chat }: ChatCardProps) {
     return date.toLocaleDateString();
   };
 
-  const truncateText = (text: string, maxLength: number = 60) => {
+  const truncateText = (text: string | undefined | null, maxLength: number = 60) => {
+    if (!text) return '';
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
   };
@@ -94,16 +103,16 @@ export default function ChatCard({ chat }: ChatCardProps) {
             {/* Chat Info */}
             <div className="flex-1 min-w-0">
               <h3 className="text-lg font-bold text-white truncate group-hover:text-cyan-400 transition-colors mb-1">
-                {chat.title}
+                {chat.title || 'Untitled Chat'}
               </h3>
               <p className="text-sm text-gray-400">
-                {chat.participants.length} {chat.participants.length === 1 ? 'participant' : 'participants'}
+                {participantsCount || 0} {participantsCount === 1 ? 'participant' : 'participants'}
               </p>
             </div>
           </div>
 
           {/* Unread Badge */}
-          {chat.unreadCount > 0 && (
+          {chat.unreadCount && chat.unreadCount > 0 && (
             <div className="flex-shrink-0">
               <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cyan-500 text-white text-xs font-bold shadow-lg shadow-cyan-500/50">
                 {chat.unreadCount > 9 ? '9+' : chat.unreadCount}

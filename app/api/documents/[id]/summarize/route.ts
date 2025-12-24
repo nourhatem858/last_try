@@ -321,18 +321,22 @@ export async function POST(
           messages: [
             {
               role: 'system',
-              content: 'You are an expert document analyzer. Provide clear, structured summaries in JSON format with keys: summary, points, keywords.',
+              content: 'You are an expert multilingual document analyzer. Automatically detect the document language and provide summaries in the SAME language. Provide clear, structured summaries in JSON format with keys: summary, points, keywords. Support Arabic, English, and all other languages.',
             },
             {
               role: 'user',
-              content: `Summarize this professional document into:
-1. "summary": Short summary (2-3 sentences)
-2. "points": Main bullet points (5-7 points as array)
-3. "keywords": Important keywords (5-8 words as array)
+              content: `Analyze and summarize this document in its ORIGINAL language:
+
+IMPORTANT: Respond in the SAME language as the document content below.
+
+Provide JSON with:
+1. "summary": Short summary (2-3 sentences) in the document's language
+2. "points": Main bullet points (5-7 points as array) in the document's language
+3. "keywords": Important keywords (5-8 words as array) in the document's language
 
 DOCUMENT TITLE: ${document.title}
 
-TEXT:
+DOCUMENT TEXT:
 ${content.substring(0, 8000)}`,
             },
           ],

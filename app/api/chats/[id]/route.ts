@@ -44,6 +44,7 @@ export async function GET(
       participants: userId,
     })
       .populate('workspace', 'name')
+      .populate('messages.sender', 'name email')
       .lean();
 
     if (!chat) {
@@ -73,7 +74,9 @@ export async function GET(
           workspaceId: chat.workspace?.toString() || null,
           isAIConversation: chat.isAIConversation,
           messages: chat.messages.map((msg: any) => ({
-            sender: msg.sender.toString(),
+            sender: msg.sender?._id?.toString() || msg.sender.toString(),
+            senderName: msg.sender?.name || 'Unknown User',
+            senderEmail: msg.sender?.email || '',
             content: msg.content,
             type: msg.type,
             metadata: msg.metadata,

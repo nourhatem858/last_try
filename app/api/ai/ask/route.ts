@@ -126,7 +126,11 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error: any) {
-    console.error('AI Ask POST error:', error);
+    console.error('❌ AI Ask POST error:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
 
     if (error.name === 'JsonWebTokenError') {
       return NextResponse.json(
@@ -135,8 +139,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Return detailed error for debugging
     return NextResponse.json(
-      { success: false, error: error.message || 'Failed to get AI response' },
+      { 
+        success: false, 
+        error: error.message || 'Failed to get AI response',
+        details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      },
       { status: 500 }
     );
   }

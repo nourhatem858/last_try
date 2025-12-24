@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
   const router = useRouter();
-  const { signup } = useAuth();
+  const { signup, user } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,6 +18,24 @@ export default function SignupPage() {
   const [error, setError] = useState('');
   const [errorCode, setErrorCode] = useState('');
   const [success, setSuccess] = useState(false);
+  const [formKey, setFormKey] = useState(0);
+
+  const resetAuthForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    });
+    setError('');
+    setErrorCode('');
+    setSuccess(false);
+    setFormKey(prev => prev + 1);
+  };
+
+  useEffect(() => {
+    resetAuthForm();
+  }, []);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -174,7 +192,7 @@ export default function SignupPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form key={formKey} onSubmit={handleSubmit} className="space-y-5">
 
             {/* Name */}
             <div>
@@ -183,9 +201,10 @@ export default function SignupPage() {
               </label>
               <input
                 type="text"
-                value={formData.name}
+                value={formData.name || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 required
+                autoComplete="off"
                 className="w-full px-4 py-3 bg-[#0A1420] border border-[#1F77FF]/30 rounded-lg text-white placeholder-[#999999] focus:ring-2 focus:ring-[#1F77FF] focus:border-transparent transition-all duration-200"
                 placeholder="John Doe"
               />
@@ -198,9 +217,10 @@ export default function SignupPage() {
               </label>
               <input
                 type="email"
-                value={formData.email}
+                value={formData.email || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                 required
+                autoComplete="off"
                 className="w-full px-4 py-3 bg-[#0A1420] border border-[#1F77FF]/30 rounded-lg text-white placeholder-[#999999] focus:ring-2 focus:ring-[#1F77FF] focus:border-transparent transition-all duration-200"
                 placeholder="your@email.com"
               />
@@ -213,9 +233,10 @@ export default function SignupPage() {
               </label>
               <input
                 type="password"
-                value={formData.password}
+                value={formData.password || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
                 required
+                autoComplete="new-password"
                 className="w-full px-4 py-3 bg-[#0A1420] border border-[#1F77FF]/30 rounded-lg text-white placeholder-[#999999] focus:ring-2 focus:ring-[#1F77FF] focus:border-transparent transition-all duration-200"
                 placeholder="Enter your password"
               />
@@ -228,9 +249,10 @@ export default function SignupPage() {
               </label>
               <input
                 type="password"
-                value={formData.confirmPassword}
+                value={formData.confirmPassword || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
                 required
+                autoComplete="new-password"
                 className="w-full px-4 py-3 bg-[#0A1420] border border-[#1F77FF]/30 rounded-lg text-white placeholder-[#999999] focus:ring-2 focus:ring-[#1F77FF] focus:border-transparent transition-all duration-200"
                 placeholder="Confirm your password"
               />

@@ -3,13 +3,12 @@
  */
 
 import axios from 'axios';
-import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 // Base API URL - For Next.js API routes, use localhost
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 // Create axios instance
-const axiosInstance: AxiosInstance = axios.create({
+const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 5000, // 5 seconds
   headers: {
@@ -19,7 +18,7 @@ const axiosInstance: AxiosInstance = axios.create({
 
 // Request interceptor - Add JWT token to all requests
 axiosInstance.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
+  (config: any) => {
     // Only access localStorage in browser
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');

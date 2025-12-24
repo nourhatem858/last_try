@@ -1,8 +1,9 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { Card, CardFilters } from '@/types';
-import axios from '@/lib/axios';
+import { Card, CardFilters, CardsResponse, CreateCardRequest, CreateCardResponse } from '@/types';
+import axios from 'axios';
+import axiosInstance from '@/lib/axios';
 
 interface CardsContextType {
   cards: Card[];
@@ -11,7 +12,7 @@ interface CardsContextType {
   filters: CardFilters;
   setFilters: (filters: CardFilters) => void;
   fetchCards: () => Promise<void>;
-  createCard: (cardData: any) => Promise<void>;
+  createCard: (cardData: CreateCardRequest) => Promise<void>;
   refreshCards: () => Promise<void>;
 }
 
@@ -40,25 +41,38 @@ export function CardsProvider({ children }: { children: React.ReactNode }) {
       params.append('page', String(filters.page || 1));
       params.append('limit', String(filters.limit || 10));
 
-      const response = await axios.get(`/api/cards?${params.toString()}`);
+      // Properly typed axios response
+      const response = await axiosInstance.get<CardsResponse>(`/api/cards?${params.toString()}`);
 
+      // TypeScript now knows the shape of response.data
       if (response.data.success) {
         setCards(response.data.cards || []);
       } else {
         setError(response.data.error || 'Failed to fetch cards');
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error fetching cards:', err);
-      setError(err.response?.data?.error || 'Failed to fetch cards');
+      
+      // Type-safe error handling
+      if (axios.isAxiosError(err)) {
+        const errorMessage = err.response?.data?.error || err.message || 'Failed to fetch cards';
+        setError(errorMessage);
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setLoading(false);
     }
   }, [filters]);
 
-  const createCard = async (cardData: any) => {
+  const createCard = async (cardData: CreateCardRequest) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('/api/cards', cardData, {
+      
+      // Properly typed axios response
+      const response = await axiosInstance.post<CreateCardResponse>('/api/cards', cardData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -66,10 +80,21 @@ export function CardsProvider({ children }: { children: React.ReactNode }) {
 
       if (response.data.success) {
         await fetchCards(); // Refresh cards list
+      } else {
+        throw new Error(response.data.error || 'Failed to create card');
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error creating card:', err);
-      throw err;
+      
+      // Type-safe error handling
+      if (axios.isAxiosError(err)) {
+        const errorMessage = err.response?.data?.error || err.message || 'Failed to create card';
+        throw new Error(errorMessage);
+      } else if (err instanceof Error) {
+        throw err;
+      } else {
+        throw new Error('An unexpected error occurred');
+      }
     }
   };
 

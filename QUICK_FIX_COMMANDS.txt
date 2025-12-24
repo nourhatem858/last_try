@@ -1,0 +1,105 @@
+╔════════════════════════════════════════════════════════════════╗
+║           QUICK FIX COMMANDS - Copy & Paste Ready              ║
+╚════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🚀 ONE-COMMAND FIX (Recommended)                                │
+└─────────────────────────────────────────────────────────────────┘
+
+fix-all-issues.bat
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🔧 MANUAL FIXES                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+1️⃣ Fix Dev Lock:
+   taskkill /F /IM node.exe & rmdir /s /q .next & npm run dev
+
+2️⃣ Update Dependencies:
+   npm install baseline-browser-mapping@latest -D
+
+3️⃣ Verify OpenAI:
+   node verify-openai-setup.js
+
+4️⃣ Test Build:
+   npm run build
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🆘 NUCLEAR OPTION (If nothing works)                            │
+└─────────────────────────────────────────────────────────────────┘
+
+taskkill /F /IM node.exe
+rmdir /s /q .next
+rmdir /s /q node_modules
+del package-lock.json
+npm install
+npm run dev
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🔑 OpenAI API Key - Action Required                             │
+└─────────────────────────────────────────────────────────────────┘
+
+Current Status: ❌ Quota Exceeded
+
+Fix Options:
+A) Add credits: https://platform.openai.com/account/billing
+B) New API key: https://platform.openai.com/api-keys
+C) Check usage: https://platform.openai.com/usage
+
+After fixing, test with:
+   node verify-openai-setup.js
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│ ✅ VERIFICATION COMMANDS                                        │
+└─────────────────────────────────────────────────────────────────┘
+
+Check running processes:
+   Get-Process -Name node
+
+Check if lock exists:
+   Test-Path .next/dev/lock
+
+Check package version:
+   npm list baseline-browser-mapping
+
+Test TypeScript:
+   npx tsc --noEmit
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 📊 CURRENT STATUS                                               │
+└─────────────────────────────────────────────────────────────────┘
+
+✅ Dev Lock:              Ready to fix
+⚠️  OpenAI 429:           Needs credits/new key
+✅ baseline-browser:      Ready to update
+✅ Missing Export:        No issue (false alarm)
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🎯 RECOMMENDED WORKFLOW                                         │
+└─────────────────────────────────────────────────────────────────┘
+
+Step 1: Run automated fix
+   > fix-all-issues.bat
+
+Step 2: Add OpenAI credits (if needed)
+   > Visit: https://platform.openai.com/account/billing
+
+Step 3: Verify OpenAI
+   > node verify-openai-setup.js
+
+Step 4: Start development
+   > npm run dev
+
+Step 5: Test build
+   > npm run build
+
+
+╔════════════════════════════════════════════════════════════════╗
+║  📖 Full Guide: FIX_ALL_ISSUES_GUIDE.md                        ║
+╚════════════════════════════════════════════════════════════════╝

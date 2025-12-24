@@ -101,6 +101,7 @@ export default function ChatPage() {
         const result = await response.json();
         setChats([result.data, ...chats]);
         setShowCreateModal(false);
+        router.push(`/chat/${result.data.id}`);
       } else {
         throw new Error('Failed to create chat');
       }
@@ -122,7 +123,7 @@ export default function ChatPage() {
   // Calculate stats
   const stats = {
     total: chats.length,
-    unread: chats.reduce((sum, chat) => sum + chat.unreadCount, 0),
+    unread: chats.reduce((sum, chat) => sum + (chat.unreadCount || 0), 0),
     groups: chats.filter((c) => c.type === 'group').length,
   };
 

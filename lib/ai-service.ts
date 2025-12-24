@@ -35,13 +35,44 @@ export async function askAI(
   conversationHistory?: Message[]
 ): Promise<AIResponse> {
   try {
+    console.log('🤖 AI Service - Starting request:', {
+      question: question.substring(0, 100),
+      hasContext: !!context,
+      historyLength: conversationHistory?.length || 0,
+      apiKey: process.env.OPENAI_API_KEY ? 'Present (length: ' + process.env.OPENAI_API_KEY.length + ')' : 'Missing',
+      model: MODEL,
+    });
+
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'sk-your-openai-api-key-here') {
+      throw new Error('OpenAI API key is not configured. Please add a valid API key to .env.local');
+    }
+
     const messages: Message[] = [
       {
         role: 'system',
-        content: `You are an intelligent AI assistant for a Knowledge Workspace application. 
-You help users manage their notes, documents, and workspaces. 
-You can answer questions, summarize content, create notes, and provide recommendations.
-Be concise, helpful, and actionable. Support both English and Arabic languages.
+        content: `You are an intelligent multilingual AI assistant for a Knowledge Workspace application.
+
+LANGUAGE HANDLING:
+- Automatically detect and respond in the SAME language the user uses
+- Support Arabic (العربية), English, and any other language seamlessly
+- If user writes in Arabic, respond in Arabic
+- If user writes in English, respond in English
+- If user mixes languages, respond in the primary language used
+- Never mention language detection - just respond naturally
+
+YOUR CAPABILITIES:
+- Help users manage notes, documents, and workspaces
+- Answer questions about their content
+- Summarize documents and notes
+- Create and organize content
+- Provide smart recommendations
+- Search and retrieve information
+
+RESPONSE STYLE:
+- Be concise, helpful, and actionable
+- Use natural, conversational tone
+- Provide specific, practical answers
+- Format responses clearly with bullet points when helpful
 ${context ? `\n\nContext from user's workspace:\n${context}` : ''}`,
       },
       ...(conversationHistory || []),
@@ -51,6 +82,7 @@ ${context ? `\n\nContext from user's workspace:\n${context}` : ''}`,
       },
     ];
 
+    console.log('📤 Sending request to OpenAI...');
     const completion = await openai.chat.completions.create({
       model: MODEL,
       messages: messages as any,
@@ -58,6 +90,7 @@ ${context ? `\n\nContext from user's workspace:\n${context}` : ''}`,
       max_tokens: 1000,
     });
 
+    console.log('✅ OpenAI response received');
     const content = completion.choices[0]?.message?.content || 'I apologize, but I could not generate a response.';
 
     return {
@@ -65,7 +98,21 @@ ${context ? `\n\nContext from user's workspace:\n${context}` : ''}`,
       sources: [],
     };
   } catch (error: any) {
-    console.error('AI Service Error:', error);
+    console.error('❌ AI Service Error:', {
+      message: error.message,
+      type: error.type,
+      code: error.code,
+      status: error.status,
+    });
+    
+    if (error.code === 'invalid_api_key') {
+      throw new Error('Invalid OpenAI API key. Please check your API key in .env.local');
+    }
+    
+    if (error.code === 'insufficient_quota') {
+      throw new Error('OpenAI API quota exceeded. Please check your billing at platform.openai.com');
+    }
+    
     throw new Error(`AI service failed: ${error.message}`);
   }
 }
@@ -136,13 +183,16 @@ export async function generateContent(
   tags: string[];
 }> {
   try {
-    const systemPrompt = language === 'ar'
-      ? `أنت كاتب محتوى خبير. قم بإنشاء محتوى عالي الجودة باللغة العربية بناءً على الطلب.`
-      : `You are an expert content writer. Create high-quality, informative content based on the user's request.`;
+    // Auto-detect language from prompt if not specified
+    const detectedLang = language || detectLanguage(prompt);
+    
+    const systemPrompt = detectedLang === 'ar'
+      ? `أنت كاتب محتوى خبير متعدد اللغات. قم بإنشاء محتوى عالي الجودة باللغة العربية بناءً على الطلب. اكتب بأسلوب احترافي وواضح.`
+      : `You are an expert multilingual content writer. Create high-quality, informative content based on the user's request. Write in a professional and clear style.`;
 
-    const userPrompt = language === 'ar'
-      ? `أنشئ محتوى حول: ${prompt}${category ? `\nالفئة: ${category}` : ''}\n\nقدم:\n1. عنوان جذاب\n2. محتوى شامل ومنظم\n3. وسوم ذات صلة`
-      : `Create content about: ${prompt}${category ? `\nCategory: ${category}` : ''}\n\nProvide:\n1. An engaging title\n2. Comprehensive, well-structured content\n3. Relevant tags`;
+    const userPrompt = detectedLang === 'ar'
+      ? `أنشئ محتوى حول: ${prompt}${category ? `\nالفئة: ${category}` : ''}\n\nقدم:\n1. عنوان جذاب ومناسب\n2. محتوى شامل ومنظم بشكل احترافي\n3. وسوم ذات صلة (5-7 وسوم)`
+      : `Create content about: ${prompt}${category ? `\nCategory: ${category}` : ''}\n\nProvide:\n1. An engaging and appropriate title\n2. Comprehensive, professionally structured content\n3. Relevant tags (5-7 tags)`;
 
     const completion = await openai.chat.completions.create({
       model: MODEL,
@@ -169,16 +219,21 @@ export async function generateContent(
 }
 
 /**
- * Generate tags from content
+ * Generate tags from content (multilingual)
  */
 export async function generateTags(content: string): Promise<string[]> {
   try {
+    const lang = detectLanguage(content);
+    const systemPrompt = lang === 'ar' 
+      ? 'استخرج 5-7 وسوم ذات صلة من المحتوى. أرجع الوسوم فقط، مفصولة بفواصل.'
+      : 'Extract 5-7 relevant tags from the content. Return only the tags, comma-separated. Respond in the same language as the content.';
+    
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
-          content: 'Extract 5-7 relevant tags from the content. Return only the tags, comma-separated.',
+          content: systemPrompt,
         },
         {
           role: 'user',

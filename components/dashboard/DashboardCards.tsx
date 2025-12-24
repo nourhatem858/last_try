@@ -132,7 +132,7 @@ export default function DashboardCards({ stats }: DashboardCardsProps) {
                       group-hover:scale-105 transition-transform duration-300
                     `}
                   >
-                    {card.value}
+                    {card.value || 0}
                   </h3>
                   {card.change && (
                     <div className="flex items-center gap-1 text-green-400 text-sm font-semibold">
